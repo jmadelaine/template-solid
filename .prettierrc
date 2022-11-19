@@ -1,0 +1,23 @@
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "printWidth": 120,
+  "endOfLine": "lf",
+  "arrowParens": "avoid",
+  "overrides": [
+    {
+      "files": "*.test.*",
+      "options": {
+        "printWidth": 140
+      }
+    },
+    {
+      "files": "**/translations/**/*.*",
+      "options": {
+        "printWidth": 200
+      }
+    }
+  ]
+}

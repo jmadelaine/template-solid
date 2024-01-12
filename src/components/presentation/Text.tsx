@@ -11,6 +11,27 @@ interface TextProps {
   color?: string
 }
 
+const appendChildren = (element: HTMLElement, children: JSX.Element) => {
+  if (children === undefined || children === null) return
+
+  if (typeof children === 'string' || typeof children === 'number' || typeof children === 'boolean') {
+    element.innerText += String(children)
+    return
+  }
+
+  if (Array.isArray(children)) {
+    children.forEach(child => appendChildren(element, child))
+    return
+  }
+
+  if (typeof children === 'function') {
+    appendChildren(element, children())
+    return
+  }
+
+  element.appendChild(children)
+}
+
 export const Text: PComp<TextProps & JSX.HTMLAttributes<HTMLElement>> = p => {
   const component = createMemo(() => {
     const el = document.createElement(p.element ?? 'div')
@@ -39,7 +60,7 @@ export const Text: PComp<TextProps & JSX.HTMLAttributes<HTMLElement>> = p => {
       p.class
     )
 
-    el.innerHTML = String(p.children)
+    appendChildren(el, p.children)
 
     return el
   })

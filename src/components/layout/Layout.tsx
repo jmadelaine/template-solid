@@ -1,4 +1,5 @@
-import { ComponentProps, JSX, splitProps } from 'solid-js'
+import { removeProps } from 'helpers/solid'
+import { ComponentProps, JSX } from 'solid-js'
 import { css } from 'style/theme'
 import { PComp } from 'types/utils'
 
@@ -38,20 +39,31 @@ type FlexChildProps = {
   shrink?: number
 }
 
+type OtherStyleProps = {
+  padding?: string
+  position?: 'static' | 'relative' | 'absolute' | 'fixed'
+  inset?: string
+}
+
 type AsButtonProps = { asButton?: boolean; disabled?: boolean }
 
 type ScrollableProps = { scrollable?: boolean }
 
-export const Block: PComp<FlexChildProps & AsButtonProps & JSX.HTMLAttributes<HTMLDivElement>> = p => (
+export const Block: PComp<
+  FlexChildProps & OtherStyleProps & AsButtonProps & JSX.HTMLAttributes<HTMLDivElement>
+> = p => (
   <div
+    ref={p.ref}
     class={css(
       {
         boxSizing: 'border-box',
-        position: 'relative',
+        position: p.position ?? 'relative',
         flex: p.flex,
         flexBasis: p.basis,
         flexGrow: p.grow,
         flexShrink: p.shrink,
+        inset: p.inset,
+        padding: p.padding,
         ...(!!p.alignSelf && { alignSelf: alignOptions[p.alignSelf] }),
         ...(p.asButton && {
           cursor: 'pointer',
@@ -89,11 +101,6 @@ export const Block: PComp<FlexChildProps & AsButtonProps & JSX.HTMLAttributes<HT
     {p.children}
   </div>
 )
-
-const removeProps = <T, K extends [readonly (keyof T)[], ...(readonly (keyof T)[])[]]>(
-  props: T,
-  ...keys: K
-): Omit<T, K[number][number]> => splitProps(props, ...keys)[1]
 
 export const Flex: PComp<ComponentProps<typeof Block> & FlexProps & ScrollableProps> = p => {
   const props = removeProps(p, ['class', 'flex', 'scrollable', 'gap', 'direction', 'align', 'distribute'])

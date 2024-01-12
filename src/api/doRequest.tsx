@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { Params, Payload } from './types'
 import { nullToUndefined, undefinedToNull } from './utils'
 
 export const doRequest = async ({
@@ -10,11 +9,9 @@ export const doRequest = async ({
 }: {
   url: string
   method: 'get' | 'post' | 'put' | 'patch' | 'delete'
-  params?: Params
-  payload?: Payload | FormData
+  params?: Record<string, unknown>
+  payload?: Record<string, unknown> | Record<string, unknown>[] | FormData
 }) => {
-  // FIXME: get real access token
-  const accessToken = 'REPLACE_ME'
   // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
   return nullToUndefined(
     (
@@ -22,9 +19,10 @@ export const doRequest = async ({
         url,
         method,
         params: params ? undefinedToNull(params) : undefined,
-        // FormData used to upload files, sodn't undefinedToNull in that case
+        // FormData used to upload files, so don't use undefinedToNull in that case
         data: payload ? (payload instanceof FormData ? payload : undefinedToNull(payload)) : undefined,
-        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
+        // TODO: pass access token
+        // headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined,
       })
     ).data
   ) as unknown

@@ -1,4 +1,5 @@
 import { injectGlobal } from '@emotion/css'
+import { theme } from './theme'
 
 export const loadGlobalCss = () => {
   injectGlobal({
@@ -37,6 +38,8 @@ export const loadGlobalCss = () => {
       WebkitUserDrag: 'none',
       width: '100%',
       wordWrap: 'break-word',
+      backgroundColor: theme.colors.background(0),
+      color: theme.colors.text(0),
     },
     'p, h1, h2, h3, h4, h5, h6': { fontSize: 'inherit' },
     '#root': { inset: 0, overflow: 'hidden', position: 'fixed', zIndex: 1 },

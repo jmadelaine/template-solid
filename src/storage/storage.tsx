@@ -17,7 +17,7 @@ const hasLocalStorageAccess = () => {
 const webSecureStorage: Map<string, string> = new Map()
 const setSecurely = async (key: string, value: string) => Promise.resolve(webSecureStorage.set(key, value))
 
-const setDangerously = async (key: string, value: string) => {
+const setUnsecurely = async (key: string, value: string) => {
   if (hasLocalStorageAccess()) window.localStorage.setItem(key, value)
   return Promise.resolve()
 }
@@ -32,4 +32,4 @@ const remove = async (key: string) => {
   return Promise.resolve()
 }
 
-export const storage = { setDangerously, setSecurely, get, remove }
+export const storage = { setUnsecurely, setSecurely, get, remove }
